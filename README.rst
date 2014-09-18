@@ -2,66 +2,50 @@
 vmod_example
 ============
 
-----------------------
-Varnish Example Module
-----------------------
+------------------------
+Varnish Substring Module
+------------------------
 
-:Author: Martin Blix Grydeland
-:Date: 2011-05-26
+:Author: Per BUer
+:Date: 2014-09-18
 :Version: 1.0
 :Manual section: 3
 
 SYNOPSIS
 ========
 
-import example;
+import substring;
 
 DESCRIPTION
 ===========
 
-Example Varnish vmod demonstrating how to write an out-of-tree Varnish vmod
-for Varnish 3.0 and later.
-
-Implements the traditional Hello World as a vmod.
+Substring matching in Varnish.
 
 FUNCTIONS
 =========
 
-hello
------
+substr
+------
 
 Prototype
         ::
 
-                hello(STRING S)
+                substr(STRING S, STRING M)
 Return value
-	STRING
+	BOOL
 Description
-	Returns "Hello, " prepended to S
+	Returns TRUE if M is a substring of S.
 Example
         ::
 
-                set resp.http.hello = example.hello("World");
+                if (substring.substr("foobar", "bar") ..
 
 INSTALLATION
 ============
 
-This is an example skeleton for developing out-of-tree Varnish
-vmods available from the 3.0 release. It implements the "Hello, World!" 
-as a vmod callback. Not particularly useful in good hello world 
-tradition,but demonstrates how to get the glue around a vmod working.
-
-The source tree is based on autotools to configure the building, and
-does also have the necessary bits in place to do functional unit tests
-using the varnishtest tool.
-
 Usage::
 
- ./configure VARNISHSRC=DIR [VMODDIR=DIR]
-
-`VARNISHSRC` is the directory of the Varnish source tree for which to
-compile your vmod. Both the `VARNISHSRC` and `VARNISHSRC/include`
-will be added to the include search paths for your module.
+ ./configure [VMODDIR=DIR]
 
 Optionally you can also set the vmod install directory by adding
 `VMODDIR=DIR` (defaults to the pkg-config discovered directory from your
@@ -75,20 +59,19 @@ Make targets:
 
 In your VCL you could then use this vmod along the following lines::
         
-        import example;
+        import substring;
 
-        sub vcl_deliver {
+        sub vcl_recv {
                 # This sets resp.http.hello to "Hello, World"
-                set resp.http.hello = example.hello("World");
+                if (substring.substr("foobar", "bar") {
+	           set req.http.truth = "There is a bar in foobar.";
+		}
         }
 
 HISTORY
 =======
 
-This manual page was released as part of the libvmod-example package,
-demonstrating how to create an out-of-tree Varnish vmod. For further
-examples and inspiration check the vmod directory:
- https://www.varnish-cache.org/vmods
+No history.
 
 COPYRIGHT
 =========
