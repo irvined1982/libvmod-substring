@@ -1,4 +1,4 @@
-varnishtest "Test example vmod"
+varnishtest "Test substring vmod"
 
 server s1 {
        rxreq
@@ -6,10 +6,10 @@ server s1 {
 } -start
 
 varnish v1 -vcl+backend {
-	import example from "${vmod_topbuild}/src/.libs/libvmod_substring.so";
+	import substring from "${vmod_topbuild}/src/.libs/libvmod_substring.so";
 
 	sub vcl_deliver {
-	    if (substring.substr(req.url, "foo") {
+	    if (substring.substr(req.url, "foo")) {
 		set resp.http.sub = "success";	
 	    }
 		
