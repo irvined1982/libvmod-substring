@@ -1,0 +1,2 @@
+$Module substring 3 Substring VMOD
+$Function BOOL substr(STRING, STRING)

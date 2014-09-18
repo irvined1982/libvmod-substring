@@ -6,17 +6,20 @@ server s1 {
 } -start
 
 varnish v1 -vcl+backend {
-	import example from "${vmod_topbuild}/src/.libs/libvmod_example.so";
+	import example from "${vmod_topbuild}/src/.libs/libvmod_substring.so";
 
 	sub vcl_deliver {
-		set resp.http.hello = example.hello("World");
+	    if (substring.substr(req.url, "foo") {
+		set resp.http.sub = "success";	
+	    }
+		
 	}
 } -start
 
 client c1 {
-	txreq -url "/"
+	txreq -url "/foobar"
 	rxresp
-	expect resp.http.hello == "Hello, World"
+	expect resp.http.sub == "success"
 }
 
 client c1 -run
